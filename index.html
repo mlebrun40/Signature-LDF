@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de Signature - Lycée Louis de Foix à Bayonne</title>
+  <style>
+    :root {
+      --primary-color: #011E3C;
+      --secondary-color: #AA7D47;
+      --dark-color: #333333;
+      --light-bg: #f4f6f8;
+      --border-color: #cccccc;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--light-bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--dark-color);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 22px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .preview-box {
+      border: 1px dashed var(--border-color);
+      padding: 20px;
+      border-radius: 6px;
+      background-color: #ffffff;
+      min-height: 180px;
+      margin-bottom: 20px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #426768;
+    }
+
+    .alert {
+      display: none;
+      padding: 10px;
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Générateur de Signature — Lycée Louis de Foix à Bayonne</h1>
+
+    <div class="content-grid">
+      <!-- Formulaire -->
+      <div class="form-section">
+        <div class="form-group">
+          <label for="firstname">Prénom :</label>
+          <input type="text" id="firstname" placeholder="Ex: Jean" value="Jean">
+        </div>
+
+        <div class="form-group">
+          <label for="lastname">Nom :</label>
+          <input type="text" id="lastname" placeholder="Ex: DUPONT" value="DUPONT">
+        </div>
+
+        <div class="form-group">
+          <label for="title">Intitulé du poste / Grade :</label>
+          <input type="text" id="title" placeholder="Ex: Secrétaire Général" value="Secrétaire Général">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Adresse E-mail :</label>
+          <input type="email" id="email" placeholder="Ex: jean.dupont@ac-bordeaux.fr" value="jean.dupont@ac-bordeaux.fr">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Numéro de téléphone :</label>
+          <input type="text" id="phone" placeholder="Ex:  05 59 63 31 10" value="05 59 63 31 10">
+        </div>
+      </div>
+
+      <!-- Aperçu et Actions -->
+      <div class="preview-section">
+        <label>Aperçu en direct :</label>
+        <div class="preview-box" id="signature-preview">
+          <!-- La signature HTML sera générée ici -->
+        </div>
+
+        <div class="actions">
+          <button id="copy-btn">Copier la signature de mail</button>
+          <button id="copy-text-btn">Copier la signature en mode texte</button>
+          <div id="alert" class="alert">Signature copiée dans le presse-papier ! Vous pouvez la coller dans Gmail (Ctrl+V ou Cmd+V).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firstnameInput = document.getElementById('firstname');
+    const lastnameInput = document.getElementById('lastname');
+    const titleInput = document.getElementById('title');
+    const emailInput = document.getElementById('email');
+    const previewContainer = document.getElementById('signature-preview');
+    const copyBtn = document.getElementById('copy-btn');
+    const copyTextBtn = document.getElementById('copy-text-btn');
+    const alertBox = document.getElementById('alert');
+    const phoneInput = document.getElementById('phone');
+
+    function generateSignatureHTML() {
+      const firstname = firstnameInput.value.trim() || '[Prénom]';
+      const lastname = lastnameInput.value.trim() || '[NOM]';
+      const title = titleInput.value.trim() || '[Intitulé du poste]';
+      const email = emailInput.value.trim() || 'ce.0640011p@ac-bordeaux.fr';
+      const phone = phoneInput.value.trim() || '0559633110';
+
+      return `
+      
+      
+       <div style="font-size: 16px; font-weight: bold; color: #011E3C; margin-bottom: 2px;">
+        ${firstname} ${lastname}
+      </div>
+      <div style="font-size: 13px; font-weight: bold; color: #AA7D47; text-transform: uppercase; margin-bottom: 2px;">
+        ${title}
+      </div>
+
+      <!-- Structure -->
+      <div style="font-weight: bold; color: #555555; margin-bottom: 6px;">
+        Lycée Louis de Foix à Bayonne
+      </div>
+
+      <!-- Coordonnées -->
+      <div style="font-size: 12px; color: #666666;">
+        <strong>Tél :</strong> <a href="tel:${phone}" style="color: #003399; text-decoration: none;">${phone}</a><br />
+        <strong>E-mail :</strong> <a href="mailto:${email}" style="color: #003399; text-decoration: none;">${email}</a><br />
+        <strong>Site :</strong> <a href="https://louisdefoix.fr" target="_blank" style="color: #003399; text-decoration: none;">https://louisdefoix.fr</a>
+      </div>
+      <div style="margin-top: 8px; font-size: 11px; color: #888888;">
+        4 avenue Jean Rostand, 64100 Bayonne
+      </div>
+      <!-- Logos mis en page horizontal (vertical aligned) -->
+
+      <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+        <img src="https://louisdefoix.fr/wp-content/uploads/2025/10/logotexteadroite-1.png" alt="Logo Lycée Louis de Foix" style="height: 60px;">
+        <img src="https://louisdefoix.fr/wp-content/uploads/2026/09/Republique-francaise-logo.svg" alt="Logo République Française" style="height: 100px;">
+      </div>
+      
+      `;
+    }
+
+    function updatePreview() {
+      previewContainer.innerHTML = generateSignatureHTML();
+    }
+
+    function showAlert(message) {
+      alertBox.textContent = message;
+      alertBox.style.display = 'block';
+      setTimeout(() => {
+        alertBox.style.display = 'none';
+      }, 4000);
+    }
+
+    // Mise à jour automatique à la saisie
+    [firstnameInput, lastnameInput, titleInput, emailInput].forEach(input => {
+      input.addEventListener('input', updatePreview);
+    });
+
+    // Copie riche (Rich Text) pour coller dans Gmail en conservant le style et le logo
+    copyBtn.addEventListener('click', async () => {
+      const htmlContent = generateSignatureHTML();
+      
+      try {
+        const blobInput = new Blob([htmlContent], { type: 'text/html' });
+        const clipboardItem = new ClipboardItem({ 'text/html': blobInput });
+        await navigator.clipboard.write([clipboardItem]);
+
+        showAlert('Signature copiée dans le presse-papier ! Vous pouvez la coller dans Gmail (Ctrl+V ou Cmd+V).');
+      } catch (err) {
+        // Alternative pour navigateurs plus anciens
+        const range = document.createRange();
+        range.selectNode(previewContainer);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+
+        showAlert('Signature copiée dans le presse-papier ! Vous pouvez la coller dans Gmail (Ctrl+V ou Cmd+V).');
+      }
+    });
+
+    // Copie du code source HTML en texte brut, balises incluses
+    copyTextBtn.addEventListener('click', async () => {
+      const htmlContent = generateSignatureHTML();
+
+      try {
+        await navigator.clipboard.writeText(htmlContent);
+      } catch (err) {
+        const textArea = document.createElement('textarea');
+        textArea.value = htmlContent;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
+
+      showAlert('Le code HTML de la signature a été copié dans le presse-papier.');
+    });
+
+    // Initialisation au chargement
+    updatePreview();
+  </script>
+</body>
+</html>
